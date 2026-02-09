@@ -1,0 +1,54 @@
+# ViT
+
+- MSA
+  - Multi-head self attention
+- decoder
+- encoder
+  - 每个encoder结构中都包含msa
+  - preNorm
+    - 分支主题
+    - prenorm更容易收敛
+    - prenorm收敛了后效果更好
+- Vit不同
+  - 不需要做分词
+  - 需要分patch,分块
+  - Patch Embedding转换为patch的序列
+  - 卷积层可以认为是一种patch embedding,
+    - 步幅不为1，不重叠
+- 注意力机制
+  - 先对vector做projection,变成v1
+  - attention表示相似度，用点积表示相似度
+  - query,查询，每个query和key去算点积，算attention的weight
+  - 序列中的每个店都有q和k
+    - 给谁算attention就用谁的q×别人的key
+  - self-attention
+    - 假设有一个feature vecter
+      - 先embedding让他变成v序列
+      - 再算k序列
+      - 再算q序列
+      - V*K之后称为S
+        - 通过公式Attention = softmax（S）/根号dk，减少var，来实现不止对最大的top one有注意力，对其它的也有注意力
+        - 做scale & softmax
+    - 可以很容易被转换为矩阵计算
+      - 多个vector拼接为矩阵
+  - multi-head attention
+    - 就是self-attention复制多份
+    - 多头，每个头的输出dim为输入dim除多头个数
+    - (无标题)
+- 分支主题
+  - 基于位置将图像转化为序列
+  - 可以理解为卷积层
+- 整体结构
+  - patch_embedding\encoder\decoder
+- Swin-T
+  - 解决ViT对于下游任务不友好的问题
+  - 小Patch开始逐层合并相邻patch
+    - 相邻4个融合成一个
+    - 空间上4个变一个
+    - 维度上变为原有2倍
+  - ViT中Block变为Swin Transformer Block
+    - window
+      - 在patch基础上切无重叠的window
+      - attention只在窗口内部做
+      - 输出维度不变
+  - 增加了patch mergin

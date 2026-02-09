@@ -1,0 +1,56 @@
+# BEV
+
+- VPN
+  - 解决哪些问题
+    - 多视角的语义分割
+      - 纯图像输入到自上而下的语义
+      - 老方法
+        - 基于深度摄像机的方法
+        - 直接训练
+    - 多模态语义输出
+      - 语义分割
+      - 布局估计
+        - freespace是一种布局估计
+  - 怎么解决的
+    - encode-decode结构到encode-VTM-decode
+    - VTM
+      - 形式为一系列逐通道全连接层和通道拆分拼接
+      - VRM（view relation module）
+        - 特征图逐通道展平
+        - 两层MLP（全连接层）
+      - VFM(view fuion module)
+      - 不改变特征图形状，学习第一试图和自顶向下特征图之间的空间位置和依赖关系
+    - 获取训练数据
+      - 虚拟空间
+        - House3D
+        - CARLA
+      - 真实数据集
+        - NuScenes
+          - 6个方向的第一视角数据
+          - 自上而下的语义标注
+  - 效果如何
+    - encode-VTM-decode的结构比起encode-decode的结构检测效果明显提升
+- BEVFormer
+  - BEV（鸟瞰图）可以方便的桥接时间和空间
+  - 可以支持多模态语义的任务
+    - 3D OBJ
+      - 老方法
+        - 2D-BOX基础上预测3D-BOX
+        - FCOS直接预测每个对象的3D BOX
+        - DERT-3D，可学习的3D queries，端到端3D BOX预测
+      - BEV方法
+        - 基于自顶向下视图特征预测3D BOX
+    - 语义分割
+  - grid-shaped BEV queries
+    - 网格型BEV查询
+    - 通过注意力机制灵活融合空间与时间特征
+  - 空间cross-attention
+    - 聚合来自多个摄像头的空间特征
+    - cross-attention
+      - DERT(全局注意力)
+      - Deformable attention
+        - 多个采样头
+        - 每个采样头具有可学习的权重，注意权值，归一化预测偏移量（用双线性插值提取）
+      - 有的看了，需要关注vznilla multi-head attention
+  - 时间self-attention
+    - 历史BEV中提取时间特征

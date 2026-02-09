@@ -1,0 +1,56 @@
+# onnxruntime
+
+- onnx
+  - operators
+    - core ops
+    - custom ops
+  - 一种开放模型表达
+  - 结构
+    - model
+    - graph
+    - node
+- 性能
+  - 2.8-3倍左右加速，对比pytorch,同平台
+- runtime
+  - C++ runtime
+- 架构
+  - model
+  - IR
+    - graph viewer
+      - 内存级别的图
+  - graph optimization 图优化
+    - 节点消融
+    - 节点融合
+    - rewrite rule
+    - graph transformer
+    - transformerlevel
+    - 详细
+      - 按级别
+        - 基本图优化
+          - 常量折叠
+            - 常量层输出直接装载到内存中，减少访存和IO
+          - 冗余节点消除
+            - dropout
+            - slice
+            - unsqueeze
+            - identity
+              - f(x)=x
+          - 算子融合
+            - conv-add
+            - conv-bn
+            - conv-mul
+            - reshape
+        - onnx runtime扩展优化
+      - 图优化使用方法
+      - 模式
+        - 离线模式
+          - 优化后的图存在磁盘中
+        - 在线模式
+          - 运行时优化
+  - graph partioning图分割
+    - 分割后决定图在哪个EP上计算
+  - 执行-并行
+  - execution provider(EP)
+    - 具体硬件加速器
+  - code gen
+- training
